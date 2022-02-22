@@ -8,40 +8,75 @@ from optimisers.py import updateWeightsMomentum, updateWeightsAdam, updateWeight
 
 
 
-(X_train, Y_train), (X_test, Y_test) = data.load_data()
-
-num_train = X_train.shape[0]
-num_test = X_test.shape[0]
-features = X_train.shape[1]*X_train.shape[2]  # 28x28
-#print(X_train[0,:,:])
-X_train=X_train.reshape(num_train, features)
-X_test=X_test.reshape(num_test,features)
-
-X_train=np.transpose(X_train)
-X_test=np.transpose(X_test)
+def flatten_input(X_train, X_test):
+  num_train = X_train.shape[0]
+  num_test = X_test.shape[0]
+  features = X_train.shape[1]*X_train.shape[2]  # 28x28 = 784
+  X_train=X_train.reshape(num_train, features)
+  X_test=X_test.reshape(num_test,features)
 
 
-X_train = X_train/255  # normalised data
-X_test = X_test/255
+  X_train=np.transpose(X_train)
+  X_test = np.transpose(X_test)
 
-Y= Y_train[:]
-Y = Y.reshape(X_train.shape[1],1)
+  X_train = X_train/255  # normalised data
+  X_test = X_test/255
 
-Y_train=np.zeros([10,X_train.shape[1]])
+  return(X_train, X_test)
 
-for i in range(num_train):
-  index=Y[i,0]
-  Y_train[index,i]=1
+def OneHotEncoding(Y_train,num_train):
+  Y= Y_train[:]
+  Y = Y.reshape(num_train,1)
 
-print(X_train.shape,Y_train.shape, X_test.shape, Y_test.shape)
+  Y_train=np.zeros([10,num_train])
+
+  for i in range(num_train):
+    index=Y[i,0]
+    Y_train[index,i]=1
+  return(Y_train, Y)
 
 
-def sigmoid(z):
-    a=1/(1+np.exp(-z))
-    return(a)
+def shuffle_data(X_train, Y_train):
+  m=X_train.shape[1]
+  permutation = list(np.random.permutation(m))
+  X_train = X_train[:, permutation]
+  Y_train = Y_train[:, permutation]
+  return(X_train,Y_train)
+
+
+
+
+
+def get_mini_batches(X_train, Y_train,mini_batch_size):
+    m=X_train.shape[1]  
+    num_batches = m//mini_batch_size
+    X_mini_batches = []
+    Y_mini_batches = []
+
+    X_train, Y_train = shuffle_data(X_train, Y_train)
+
+    for i in range(num_batches):
+      x=X_train[:,i*mini_batch_size:(i+1)*(mini_batch_size)]
+      y=Y_train[:,i*mini_batch_size:(i+1)*(mini_batch_size)]
+      X_mini_batches.append(x)
+      Y_mini_batches.append(y)
+
+    if m%mini_batch_size!=0:
+      index = num_batches*mini_batch_size
+      x=X_train[:,index:index+m%mini_batch_size]
+      y=Y_train[:,index:index+m%mini_batch_size]
+      X_mini_batches.append(x)
+      Y_mini_batches.append(y)
+    
+    
+    return(X_mini_batches, Y_mini_batches)     
+
+
+# Activations and their gradients
+
 
 def relu(Z):
-    
+
     A = np.maximum(0,Z)
     
     assert(A.shape == Z.shape)
@@ -49,23 +84,50 @@ def relu(Z):
     return A
 
 def reluGradient(z):
-    
-    
-    dZ = np.zeros(z.shape) # just converting dz to a correct object.
-    
-    
+    dZ = np.zeros(z.shape) 
     dZ[z > 0] = 1
-    
     assert (dZ.shape == z.shape)
-    
     return dZ
 
+def sigmoid(z):
+    a=1/(1+np.exp(-z))
+    return(a)
+
+
+def sigmoidGradient(z):
+    a=sigmoid(z)
+    return(a*(1-a))
+
+
+def tanh(z):
+  a=np.tanh(z)
+  return(a)
+
+def tanhGradient(z):
+  a=tanh(z)
+  return(1-a**2)
 
 def softmax(z):
     num=np.exp(z)
     den=np.sum(np.exp(z),axis=0)
     a=num/den
     return(a)
+
+
+
+
+def initialize_weights(layers, params, M, R):
+  # seed=3
+  # np.random.seed(seed)
+  for i in range(1,len(layers)):
+      params["W"+str(i)]=np.random.randn(layers[i],layers[i-1])*np.sqrt(2 / layers[i-1])
+      params["b"+str(i)]=np.zeros([layers[i],1])
+      M["W"+str(i)]=np.zeros([layers[i],layers[i-1]])
+      M["b"+str(i)]=np.zeros([layers[i],1])
+      R["W"+str(i)]=np.zeros([layers[i],layers[i-1]])
+      R["b"+str(i)]=np.zeros([layers[i],1])
+  return(params, M, R)
+
 
 def feedforward(params,layers,X):
     
@@ -85,15 +147,12 @@ def feedforward(params,layers,X):
     W=params["W"+str(n)]
     b=params["b"+str(n)]
     z = np.dot(W,a)+b
-    a = sigmoid(z)
+    a = softmax(z)
     Z.append(z)
     A.append(a)
     return(A,Z)
 
 
-def sigmoidGradient(z):
-    a=sigmoid(z)
-    return(a*(1-a))
 
 def backwardPropagate(params, layers,Z,A,alpha,Y):
     m=Y.shape[1]
@@ -114,8 +173,8 @@ def backwardPropagate(params, layers,Z,A,alpha,Y):
         
 def crossEntropyError(a,Y):
     m=a.shape[1]
-    #error=-(np.sum(np.sum(Y*np.log(a),axis=1),axis=0)/m)
-    error=-np.sum(Y*np.log(a)+(1-Y)*np.log(1-a))/m
+    error=-(np.sum(np.sum(Y*np.log(a),axis=1),axis=0))
+    #error=-np.sum(Y*np.log(a)+(1-Y)*np.log(1-a))/m
     return(error)
      
 def squaredError(a,Y):
@@ -123,104 +182,161 @@ def squaredError(a,Y):
     error=np.sum(np.square(a-Y),axis=1)/m
     return(error)
 
-def updateWeights(params,gradients,layers,alpha,optimiser,M,R,gamma1,gamma2,beta,eps,t):
-	if(optimiser=="momentum"):
-		return(updateWeightsMomentum(params,gradients,layers,alpha,beta,M))
-	else if(optimiser=="adam"):
-		return(updateWeightsAdam(params,gradients,layers,alpha,gamma1,gamma2,eps,t,M,R))
-	else if(optimiser=="RMS"):
-		return(updateWeightsRMS(params,gradients,layers,alpha,beta,R))
 
+def predict(params, layers, X_train, X_test, Y_train_orig, Y_test):
+  num_train = X_train.shape[1]
+  num_test = X_test.shape[1]
+  A,Z=feedforward(params, layers, X_test)
+  pred=A[-1]
+  max_index = np.argmax(pred, axis=0)
+  count=0
+  for i in range(num_test):
+      if(Y_test[0,i]==max_index[i]):
+          count+=1
+  print("test accuracy: ",(count/num_test)*100)
 
- 
-
-def initialize_weights():
-  seed=3
-  np.random.seed(seed)
-  for i in range(1,len(layers)):
-      params["W"+str(i)]=np.random.randn(layers[i],layers[i-1])*np.sqrt(2 / layers[i-1])
-      params["b"+str(i)]=np.zeros([layers[i],1])
-      M["W"+str(i)]=np.zeros([layers[i],layers[i-1]])
-      M["b"+str(i)]=np.zeros([layers[i],1])
-      R["W"+str(i)]=np.zeros([layers[i],layers[i-1]])
-      R["b"+str(i)]=np.zeros([layers[i],1])
+  A,Z=feedforward(params, layers, X_train)
+  pred=A[-1]
+  max_index = np.argmax(pred, axis=0)
+  count=0
+  for i in range(num_train):
+      if(Y_train_orig[0,i]==max_index[i]):
+          count+=1
+  print("train accuracy: ",(count/num_train)*100)
+  return((count/num_train)*100)
+          
       
+  
+
+(X_train, Y_train), (X_test, Y_test) = data.load_data()
+(X_train, X_test) = flatten_input(X_train,X_test)
+
+
+num_train= X_train.shape[1]
+num_test=X_test.shape[1]
+
+
+(Y_train,Y_train_orig)= OneHotEncoding(Y_train,num_train)
+
+Y_train_orig= Y_train_orig.reshape(1,num_train)
+Y_test= Y_test.reshape(1,num_test)
+
+
+print(X_train.shape,Y_train.shape, X_test.shape, Y_test.shape)
 
 
 
 
+sweep_config = {
+  "name": "Bayesian Sweep",
+  "method": "bayes",
+  "metric":{
+  "name": "validationaccuracy",
+  "goal": "maximize"
+  },
+  "parameters": {
+        "iters": {
+            "values": [5, 10]
+        },
+
+        "initializer": {
+            "values": ["RANDOM", "XAVIER", "HE"]
+        },
+
+        "layers": {
+            "values": [2, 3, 4]
+        },
+        
+        
+        "num_hidden_neurons": {
+            "values": [32, 64, 128]
+        },
+        
+        "activation": {
+            "values": [ 'SIGMOID', 'RELU']
+        },
+        
+        "learning_rate": {
+            "values": [0.001, 0.0001]
+        },
+        
+        
+        "weight_decay": {
+            "values": [0, 0.0005,0.5]
+        },
+        
+        "optimizer": {
+            "values": ["SGD", "MGD", "RMSPROP", "ADAM"]
+        },
+                    
+        "batch_size": {
+            "values": [16,32,64]
+        }
+        
+        
+    }
+}
+
+sweep_id = wandb.sweep(sweep_config,project='Assignment__', entity='go4rav')
 
 
-# number of layers and each layer number of units are flexible
+def train_model(X_train, Y_train,X_test, Y_test, Y_train_orig):
+    wandb.init(project="assignment_1_",entity='go4rav')
+    CONFIG=wandb.config
+    print("Testing",CONFIG)
+    mini_batch_size=CONFIG["batch_size"]
+    layers=[784,32,32,32,10] 
+    params={}
+    M={}
+    R={}
+    errors=[]
+    params, M, R = initialize_weights(layers, params, M, R)
+    
+
+    (X_mini_batches, Y_mini_batches) = get_mini_batches(X_train, Y_train,mini_batch_size)
 
 
-layers=[784,32,32,32,10]
+    errors=[]
+    iters= 1
+    gamma1=0.9
+    gamma2=0.999
+    eps=1e-8
+    alpha=0.001
+    seed=10
+    m=X_train.shape[1]
+    
+    t=0
 
-params={}
+    while(iters<=10):
+        error=0
+        for i in range(len(X_mini_batches)):
+          X_train_mini=X_mini_batches[i]
+          Y_train_mini=Y_mini_batches[i]
+          A,Z=feedforward(params, layers, X_train_mini)
+          error+= crossEntropyError(A[-1], Y_train_mini)
+          #error=squaredError(A[-1],Y_train)
+          gradients=backwardPropagate(params, layers,Z, A, alpha, Y_train_mini)
+          t=t+1
+          updateWeights(params,gradients,layers,alpha,optimiser,M,R,gamma1,gamma2,beta,eps,t,optimiser)
+        error=error/m
+        if(iters<=10):
+          errors.append(error)
+          print(error,iters)
 
-M={}
-R={}
-errors=[]
-initialize_weights()
+        elif(iters%10==0):
+          errors.append(error)
+          print(error,iters)
+        iters+=1
+      
+    #A,Z=feedforward(params, layers, X_train)
+    #print(A[-1])
 
+    plt.plot(errors)
+    plt.xlabel("EPOCHS")
+    plt.ylabel("Loss value")
 
-# X_train=np.array([[0,0,1,1],[0,1,0,1]])
-# Y_train=np.array([[0,1,1,0]])
-
-m=X_train.shape[1]
-batch_size=64
-X_mini_batches=[]
-Y_mini_batches=[]
-num_batches=m//batch_size
-for i in range(num_batches):
-  x=X_train[:,i*batch_size:(i+1)*(batch_size)]
-  y=Y_train[:,i*batch_size:(i+1)*(batch_size)]
-  X_mini_batches.append(x)
-  Y_mini_batches.append(y)
-
-if m%batch_size!=0:
-  index = num_batches*batch_size
-  x=X_train[:,index:index+m%batch_size]
-  y=Y_train[:,index:index+m%batch_size]
-  X_mini_batches.append(x)
-  Y_mini_batches.append(y)
-
-
-errors=[]
-gamma1=0.9
-gamma2=0.999
-eps=1e-8
-iters= 10000
-alpha=0.001
-seed=1000
-t=0
-
-# you can use "adam", "momentum", "RMS"
-optimiser="adam"      
-
-
-# mini_batch gradient descent
-
-
-while(iters):
-    error=0
-    for i in range(len(X_mini_batches)):
-      X_train_mini=X_mini_batches[i]
-      Y_train_mini=Y_mini_batches[i]
-      A,Z=feedforward(params, layers, X_train_mini)
-      error+= crossEntropyError(A[-1], Y_train_mini)
-      #error=squaredError(A[-1],Y_train)
-      gradients=backwardPropagate(params, layers,Z, A, alpha, Y_train_mini)
-      t=t+1
-      updateWeights(params,gradients,layers,alpha,optimiser,M,R,gamma1,gamma2,beta,eps,t,optimiser)
-    if(iters%1000==0):
-      errors.append(error/m)
-      print(error/m,iters)
-    iters-=1
-   
-#A,Z=feedforward(params, layers, X_train)
-#print(A[-1])
-
-plt.plot(errors)
-plt.xlabel("EPOCHS")
-plt.ylabel("Loss value")
+    validationaccuracy=predict(params, layers, X_train, X_test, Y_train_orig, Y_test)
+	
+	
+#train_model(X_train, Y_train,X_test, Y_test, Y_train_orig)
+wandb.agent(sweep_id, train_model,count = 2)
