@@ -4,7 +4,7 @@ This is first assignment of the CS6910-Fundamentals-of-Deep-Learning course. The
 Networks(ANN).   ANN has been  implemented from scratch without using any deep learning frameworks like Keras or Tensorflow.
 
 
-# Four Core Steps for ANN:
+## Four Core Steps for ANN:
 
 1) Data preprocessing and splitting.
 2) Model Training
