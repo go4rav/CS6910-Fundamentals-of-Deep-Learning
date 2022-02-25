@@ -21,6 +21,7 @@ We first flatten the input data and then do one hot encoding of each output labe
 Helper functions created:
 
 > a) FlattenInput(X_train, X_test)
+
 > b) OneHotEncoding(Y_train,num_train)
 
 Now, we shuffle the input data and split into training data and validation data in the ratio of 9:1. We also normalize the input data.
