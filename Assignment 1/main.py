@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 import matplotlib.pyplot as plt
-from optimisers.py import UpdateWeightsSGD, UpdateWeightsMomentum, UpdateWeightsAdam, UpdateWeightsRMS, UpdateWeightsNAdam, UpdateWeightsAdam
+from optimisers.py import UpdateWeightsSGD, UpdateWeightsMomentum, UpdateWeightsNesterov, UpdateWeightsRMS, UpdateWeightsNAdam, UpdateWeightsAdam
 
 
 # Flattening input training data each image of size 28x28 pixels into a vector of size 784
