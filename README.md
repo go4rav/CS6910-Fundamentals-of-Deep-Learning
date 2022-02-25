@@ -79,7 +79,7 @@ We try different models by tuning the hyperparameters using wandb's Random Sweep
 
 Different hyperparamters are batch_size, number of epochs, weight initialiser, optimiser, learning rate, activation function, weight decay, number of layers and number of hidden neurons of each layer.
 
-#### >Helper Functions: 
+####  Helper Functions: 
 
 InitializeWeights(),  Activation functions like Sigmoid(), Tanh() , Relu() and their gradients SigmoidGradient(), TanhGradient(), ReluGradient()
 
