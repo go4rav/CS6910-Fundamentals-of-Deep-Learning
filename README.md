@@ -31,32 +31,35 @@ Now, we shuffle the input data and split into training data and validation data 
 
 After defining the network architecture, there are 4 components in training our model.
 
-a) Forward Propagation of input data
-b) Computing the error function
-c) Computing gradients through backward propagation
-d) Applying one step of gradient descent algorithm and updating the weights 
+> a) Forward Propagation of input data
+
+> b) Computing the error function
+
+> c) Computing gradients through backward propagation
+
+> d) Applying one step of gradient descent algorithm and updating the weights 
 
 We need to repeat the process for fixed number of times.
 
 Helper functions created:
 
-a) ForwardPropagation()
+> a) ForwardPropagation()
  feed forwarding our neural network to generate the output
  
-b) CrossEntropyError()
+> b) CrossEntropyError()
 
 We could use either cross entropy error function or Mean Squared Error Function
 
-c) BackwardPropagation()
+> c) BackwardPropagation()
 
 d) Six helper functions for different optimisers
 
-UpdateWeightsSGD()   
-UpdateWeightsMomentum()
-UpdateWeightsRMS()
-UpdateWeightsNesterov()
-UpdateWeightsAdam()
-UpdateWeightsNAdam()
+>UpdateWeightsSGD()   
+>UpdateWeightsMomentum()
+>UpdateWeightsRMS()
+>UpdateWeightsNesterov()
+>UpdateWeightsAdam()
+>UpdateWeightsNAdam()
 
 
 ### 3) HyperParameter Tuning:
