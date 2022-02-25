@@ -27,6 +27,8 @@ Helper functions created:
 Now, we shuffle the input data and split into training data and validation data in the ratio of 9:1. We also normalize the input data.
 
 
+
+
 ### 2) Model Training:
 
 After defining the network architecture, there are 4 components in training our model.
@@ -41,7 +43,7 @@ After defining the network architecture, there are 4 components in training our 
 
 We need to repeat the process for fixed number of times.
 
-Helper functions created:
+#### Helper functions created:
 
 > a) ForwardPropagation()
 
@@ -52,6 +54,9 @@ Helper functions created:
 We could use either cross entropy error function or Mean Squared Error Function
 
 > c) BackwardPropagation()
+
+
+
 
 d) Six helper functions for different optimisers
 
