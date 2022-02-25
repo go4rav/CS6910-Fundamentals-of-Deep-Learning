@@ -11,7 +11,7 @@ Networks(ANN).   ANN has been  implemented from scratch without using any deep l
 3) Hyperparameter tuning
 4) Evaluation
 
-1) Getting Data and preprocessing:
+### 1) Getting Data and preprocessing:
 
 We import Fashion MNIST dataset from Keras.Datasets. 
 
@@ -26,7 +26,7 @@ b) OneHotEncoding(Y_train,num_train)
 Now, we shuffle the input data and split into training data and validation data in the ratio of 9:1. We also normalize the input data.
 
 
-2) Model Training:
+### 2) Model Training:
 
 After defining the network architecture, there are 4 components in training our model.
 
@@ -58,7 +58,7 @@ UpdateWeightsAdam()
 UpdateWeightsNAdam()
 
 
-3) HyperParameter Tuning:
+### 3) HyperParameter Tuning:
 
 We try different models by tuning the hyperparameters using wandb's Random Sweep and get the optimal parameters for our model.
 
@@ -71,11 +71,14 @@ InitializeWeights(),  Activation functions like Sigmoid(), Tanh() , Relu() and t
 
 
 
-4) Evaluation :
+### 4) Evaluation :
 
 Predict() function for calculating the training, validation and test accuracies.
 
-We get our best model using these hyperparamters.
+
+We get our best model using these hyperparamters:
+
+number of layers=3, number of neurons in each layer=64, number of epochs =10, activation function = ReLU, Optimiser = NAdam , learning rate = 0.001, initialiser = 'xavier', Batch size = 16, weight decay= 0.0005,
 
 
 
