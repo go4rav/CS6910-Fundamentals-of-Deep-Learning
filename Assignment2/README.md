@@ -96,4 +96,9 @@ The youtube links are provided in the wandb report mentioned above.
 The python dependencies required for YOLOV5 as given in the [official repository](https://github.com/ultralytics/yolov5)'s requirements.txt can be installed in a virtual environment with python 3.8 and above installed. 
 
 
+###Evaluations:
 
+
+##Part A validation accuracy was 41.74%
+
+##Part B validation accuracy was 81.66%
