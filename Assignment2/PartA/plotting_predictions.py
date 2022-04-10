@@ -8,11 +8,14 @@ from keras.models import Sequential
 import cv2
 
 #test data generation
-test_datagen = ImageDataGenerator(
+
+test_dir='../input/inaturalist-dataset-12K/inaturalist_dataset_12K/val/'
+
+data_gen = ImageDataGenerator(
     rescale=1.0 / 255,
   )
 
-test_set = test_datagen.flow_from_directory(
+test_data = data_gen.flow_from_directory(
       test_dir,
       target_size=(256, 256),
       class_mode='categorical',
