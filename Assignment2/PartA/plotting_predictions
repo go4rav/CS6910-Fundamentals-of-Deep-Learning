@@ -7,6 +7,19 @@ from keras.models import Model
 from keras.models import Sequential
 import cv2
 
+#test data generation
+test_datagen = ImageDataGenerator(
+    rescale=1.0 / 255,
+  )
+
+test_set = test_datagen.flow_from_directory(
+      test_dir,
+      target_size=(256, 256),
+      class_mode='categorical',
+      shuffle=True,
+      seed=100,
+  )
+  
 
 
 loaded_model = tf.keras.models.load_model("./model")
