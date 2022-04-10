@@ -16,7 +16,7 @@ https://wandb.ai/go4rav/CS6910%20Assignment2/reports/Assignment-2---VmlldzoxODE3
 ### Training:
 Wandb framework is used to track the loss and accuracy metrics of training and validation. Moreover, bayesian sweeps have been performed for various hyper parameter configurations. 
 The sweep configuration and default configurations of hyperparameters are specficied as follows:
-```
+
 # configure sweep parameters
 
 
