@@ -8,6 +8,7 @@ from keras.models import Sequential
 
 
 loaded_model = tf.keras.models.load_model("./model")
+test_dir='../input/inaturalist-dataset-12K/inaturalist_dataset_12K/val/'
 
 
 #test data generation
