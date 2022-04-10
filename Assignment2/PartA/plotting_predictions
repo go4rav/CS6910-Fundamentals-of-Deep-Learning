@@ -14,7 +14,7 @@ loaded_model = tf.keras.models.load_model("./model")
 # classes
 categories=['Amphibia','Animalia','Arachnida','Aves','Fungi','Insecta','Mammalia','Mollusca','Plantae','Reptilia']
 
-
+# take sample images
 
 x,y,y_pred=[],[],[]
 for category in categories:
