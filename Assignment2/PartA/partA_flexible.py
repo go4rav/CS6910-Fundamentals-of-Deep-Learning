@@ -20,19 +20,19 @@ def train():
     # Command line arguments    passed , order => base_model, dense_size, data_augment, batch_norm, batch_size, number of epochs, dropout rate
 
 
-    conv_layer1= sys.argv[0]
-    conv_layer2= sys.argv[1]
-    conv_layer3= sys.argv[2]
-    conv_layer4= sys.argv[3]
-    conv_layer5= sys.argv[4]
-    dropout_rate = sys.argv[5]
-    kernel_size = sys.argv[6]
-    pool_size = sys.argv[7]
-    dense_size = sys.argv[8]
-    data_augment = sys.argv[9]
-    batch_norm = sys.argv[10]
-    batch_size = sys.argv[11]
-    epochs =  sys.argv[12]
+    conv_layer1= int(sys.argv[0])
+    conv_layer2= int(sys.argv[1])
+    conv_layer3= int(sys.argv[2])
+    conv_layer4= int(sys.argv[3])
+    conv_layer5= int(sys.argv[4])
+    dropout_rate = float(sys.argv[5])
+    kernel_size = int(sys.argv[6])
+    pool_size = int(sys.argv[7])
+    dense_size = int(sys.argv[8])
+    data_augment = bool(sys.argv[9])  # True or False
+    batch_norm = bool(sys.argv[10])   # True or False
+    batch_size = int(sys.argv[11])
+    epochs =  int(sys.argv[12])
     
 
 
