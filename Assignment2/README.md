@@ -43,28 +43,16 @@ sweep_config = {
 
 sweep_id = wandb.sweep(sweep_config,project='CS6910 Assignment2 partB', entity='go4rav')
 
-# The following is placed within the train() function. 
-config_defaults = dict(
-                dense_neurons =256 ,
-                activation = 'relu',
-                num_classes = 10,
-                optimizer = 'adam',
-                epochs = 5,
-                batch_size = 32, 
-                img_size = (224,224),
-                base_model = "Resnet50"
-            ) 
 
 
 
 ### Testing(Model Flexible):
 
-
-## Command Line Arguments for Part A:
+# Command Line Arguments for Part A:
 
 eg: python file_name.py conv_layer1 conv_layer2 conv_layer3 conv_layer3 conv_layer4 conv_layer5 dropout_rate kernel_size pool_size dense_layer_size data_augmentation batch_norm batch_size num_epochs
 
-## Command Line Aguments for Part B:
+# Command Line Aguments for Part B:
 
 eg: python file_name.py base_model_name dense_size data_augment batch_norm batch_size num_epochs dropout_rate
 
