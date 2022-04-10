@@ -7,7 +7,7 @@ from keras.models import Model
 from keras.models import Sequential
 
 
-loaded_model = tf.keras.models.load_model("./best_model")
+loaded_model = tf.keras.models.load_model("./model")
 
 
 #test data generation
