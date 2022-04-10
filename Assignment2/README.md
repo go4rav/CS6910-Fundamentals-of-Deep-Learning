@@ -32,6 +32,9 @@ Wandb framework is used to track the loss and accuracy metrics of training and v
 The sweep configuration and default configurations of hyperparameters are specficied as follows:
 ```
 # configure sweep parameters
+
+
+
 sweep_config = {
     
   "name": "Bayesian Sweep",
@@ -109,11 +112,22 @@ In our case the dense layers were swapped with the output layer having 10 softma
 
 ### Part C: Real time object detection application using YOLOV5
 
-In this task, YOLOV5s pretrained model was fine tuned to solve two problems:
-1. Mask detection
-2. Wildfire detection
+In this task, YOLOV5s pretrained model was fine tuned one problem:
+a) Traffic Analysis
 
 The youtube links are provided in the wandb report mentioned above. 
 
 The python dependencies required for YOLOV5 as given in the [official repository](https://github.com/ultralytics/yolov5)'s requirements.txt can be installed in a virtual environment with python 3.8 and above installed. 
 It is  better if the system dependencies 1 and 2 mentioned in the beginning of this readme are satisfied.  
+
+
+### Flexibility of Model
+## Command Line Arguments for Part A:
+
+eg: python file_name.py conv_layer1 conv_layer2 conv_layer3 conv_layer3 conv_layer4 conv_layer5 dropout_rate kernel_size pool_size dense_layer_size data_augmentation batch_norm batch_size num_epochs
+
+## Command Line Aguments for Part B:
+
+eg: python file_name.py base_model_name dense_size data_augment batch_norm batch_size num_epochs dropout_rate
+
+
