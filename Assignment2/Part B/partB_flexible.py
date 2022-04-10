@@ -25,12 +25,12 @@ def train():
     # Command line arguments    passed , order => base_model, dense_size, data_augment, batch_norm, batch_size, number of epochs, dropout rate
 
     base_model = sys.argv[0]
-    dense_size = sys.argv[1]
-    data_augment = sys.argv[2]
-    batch_norm = sys.argv[3]
-    batch_size = sys.argv[4]
-    epochs = sys.argv[5]
-    dropout_rate = sys.argv[6]
+    dense_size = int(sys.argv[1])
+    data_augment = bool(sys.argv[2]) # True or False
+    batch_norm = bool(sys.argv[3])   # True or False
+    batch_size = int(sys.argv[4])
+    epochs = int(sys.argv[5])
+    dropout_rate = float(sys.argv[6])
     
     input_shape = (256,256,3)
     
