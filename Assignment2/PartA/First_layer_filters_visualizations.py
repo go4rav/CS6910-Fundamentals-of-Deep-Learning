@@ -8,6 +8,10 @@ from matplotlib import pyplot as plt
 from PIL import Image
 import numpy as np
 
+
+test_dir='../input/inaturalist-dataset-12K/inaturalist_dataset_12K/val/'
+
+
 #test data generation
 data_gen = ImageDataGenerator(
     rescale=1.0 / 255,
