@@ -10,10 +10,10 @@ The purpose of this assignment was three fold
 The link to the wandb report:
 https://wandb.ai/go4rav/CS6910%20Assignment2/reports/Assignment-2---VmlldzoxODE3NDI4
 
-## Part A: Building and training a CNN model from scratch for classification:
+### Part A: Building and training a CNN model from scratch for classification:
 
 
-### Training:
+## Training:
 Wandb framework is used to track the loss and accuracy metrics of training and validation. Moreover, bayesian sweeps have been performed for various hyper parameter configurations. 
 The sweep configuration and default configurations of hyperparameters are specficied as follows:
 
@@ -46,7 +46,7 @@ sweep_id = wandb.sweep(sweep_config,project='CS6910 Assignment2 partB', entity='
 
 
 
-### Testing(Model Flexible):
+## Testing(Model Flexible):
 
 # Command Line Arguments for Part A:
 
@@ -58,7 +58,7 @@ eg: python file_name.py base_model_name dense_size data_augment batch_norm batch
 
 
 
-### Visualisation of CNNs:
+## Visualisation of CNNs:
 
 In order to visualise how the CNNs learn, the following have been implemented through standalone scripts that use the best trained model or any trained keras compatible model for that matter:
 1. ```First_layer_filters_visualizations.py``` - filters, the associated feature maps of a specified layer. In our case, it is the first convolutional layer "conv2d"
@@ -74,7 +74,7 @@ In our case the dense layers were swapped with the output layer having 10 softma
 
 
 
-### Part C: Real time object detection application using YOLOV5
+## Part C: Real time object detection application using YOLOV5
 
 In this task, YOLOV5s pretrained model was fine tuned one problem:
 a) Traffic Analysis
