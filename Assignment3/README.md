@@ -106,11 +106,7 @@ The commands to run the testing script is simply:
 
 testing_and_visualization.ipynb notebook has been included
 
-If one aspires to do further analysis, then it is advised that the test script is run in the ipython console:
 
-```run train.py```
-
-```run test.py```
 
 
 ### Hyperparameter sweeps:
